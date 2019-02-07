@@ -19,6 +19,10 @@ class SiteController extends Controller
      */
     public function behaviors()
     {
+		/*
+		if (!\Yii::$app->user->can('updateNews')) {
+		throw new ForbiddenHttpException('Access denied');
+	}*/
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -29,6 +33,10 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+					[
+						'allow' => true,
+						'roles' => ['contact'],
+					],
                 ],
             ],
             'verbs' => [
@@ -45,6 +53,7 @@ class SiteController extends Controller
      */
     public function actions()
     {
+
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -62,7 +71,7 @@ class SiteController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
+	{		
         return $this->render('index');
     }
 
@@ -109,6 +118,8 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+		if (Yii::$app->user->can('contact')) {
+		
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -118,6 +129,10 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
+		}
+		else {
+			exit ('Ты - не админ!');
+			}
     }
 
     /**
