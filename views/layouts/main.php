@@ -9,6 +9,9 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Autoloader;
+
 
 AppAsset::register($this);
 ?>
